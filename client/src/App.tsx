@@ -113,6 +113,22 @@ function raydiumUrl(mint: string) {
   return `https://raydium.io/swap/?inputMint=${SOL_MINT}&outputMint=${mint}`
 }
 
+function dexScreenerUrl(mint: string) {
+  return `https://dexscreener.com/solana/${mint}`
+}
+
+function shareOnXUrl(row: RadarRow) {
+  const text = `🔍 Found some alpha on Bird Eye!
+
+🪙 ${row.name} ($${row.symbol})
+🛡️ Safety Score: ${row.safety.score}/100 (${row.safety.level.toUpperCase()})
+💧 Liq: ${formatUsd(row.liquidity ?? row.listingLiquidityUsd)}
+
+Check the radar: [YOUR_DEPLOYED_URL_HERE]
+#BirdeyeAPI #Solana #Alpha`
+  return `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`
+}
+
 type SortKey = 'recency' | 'safety' | 'momentum' | 'volume' | 'liquidity'
 
 export default function App() {
@@ -991,7 +1007,24 @@ function Row({
             className="bg-surface-deep/80 text-ink-muted ring-line hover:text-accent inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-2xs font-semibold uppercase tracking-wide ring-1 transition dark:bg-black/35"
           >
             Raydium
-            <IconExternal className="h-3 w-3 opacity-60" />
+          </a>
+          <a
+            href={dexScreenerUrl(row.address)}
+            target="_blank"
+            rel="noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="bg-surface-deep/80 text-ink-muted ring-line hover:text-accent inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-2xs font-semibold uppercase tracking-wide ring-1 transition dark:bg-black/35"
+          >
+            DEX
+          </a>
+          <a
+            href={shareOnXUrl(row)}
+            target="_blank"
+            rel="noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="bg-accent/10 text-accent ring-accent/25 hover:bg-accent/20 inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-2xs font-semibold uppercase tracking-wide ring-1 transition"
+          >
+            Share
           </a>
         </div>
       </td>
@@ -1106,7 +1139,7 @@ function TokenDrawer({
                 rel="noreferrer"
                 className="bg-surface-deep/80 text-accent ring-line hover:bg-accent/10 inline-flex items-center gap-1 rounded-xl px-3 py-2 text-xs font-semibold uppercase tracking-wide ring-1 transition dark:bg-black/35"
               >
-                Open in Jupiter <IconExternal className="h-3.5 w-3.5 opacity-60" />
+                Jupiter <IconExternal className="h-3.5 w-3.5 opacity-60" />
               </a>
               <a
                 href={raydiumUrl(row.address)}
@@ -1114,7 +1147,23 @@ function TokenDrawer({
                 rel="noreferrer"
                 className="bg-surface-deep/80 text-ink-muted ring-line hover:text-accent inline-flex items-center gap-1 rounded-xl px-3 py-2 text-xs font-semibold uppercase tracking-wide ring-1 transition dark:bg-black/35"
               >
-                Open in Raydium <IconExternal className="h-3.5 w-3.5 opacity-60" />
+                Raydium <IconExternal className="h-3.5 w-3.5 opacity-60" />
+              </a>
+              <a
+                href={dexScreenerUrl(row.address)}
+                target="_blank"
+                rel="noreferrer"
+                className="bg-surface-deep/80 text-ink-muted ring-line hover:text-accent inline-flex items-center gap-1 rounded-xl px-3 py-2 text-xs font-semibold uppercase tracking-wide ring-1 transition dark:bg-black/35"
+              >
+                DEXScreener <IconExternal className="h-3.5 w-3.5 opacity-60" />
+              </a>
+              <a
+                href={shareOnXUrl(row)}
+                target="_blank"
+                rel="noreferrer"
+                className="bg-accent text-slate-950 hover:bg-accent-dim inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold uppercase tracking-wide transition shadow-glow"
+              >
+                Share Alpha on X
               </a>
             </>
           )}
